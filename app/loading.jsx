@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "@/app/styles/loading.module.css";
-import AnimatedLogo from "@/public/assets/Logo.gif";
+import AnimatedLogo from "@/public/assets/logo.gif";
 
 export default function Loading() {
   return (
