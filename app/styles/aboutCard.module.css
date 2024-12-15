@@ -1,0 +1,71 @@
+@media screen {
+  .aboutCardContainer {
+    top: 20px;
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .aboutcard {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    padding: 20px;
+    min-height: 250px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    color: var(--primary-color);
+    background-color: var(--background-color);
+  }
+
+  .centerCard {
+    color: var(--background-color);
+    background-color: var(--secondary-color);
+  }
+
+  .aboutcardInfo {
+    gap: 6px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .aboutCardIcon {
+    font-size: 30px;
+  }
+
+  .aboutcardInfo h3 {
+    font-size: 1.2rem;
+    text-transform: capitalize;
+    font-family: var(-font-poppins-bold);
+  }
+
+}
+
+/* using it as global style for larger devices  */
+@media only screen and (min-width: 48em) {
+  .aboutCardContainer {
+    height: 250px;
+    flex-direction: row;
+  }
+
+  .aboutcard {
+    width: 500px;
+  }
+  
+}
+
+/* ipad pro screens & laptop */
+@media only screen and (min-width: 49em) and (max-width: 64em) {
+}
+
+/* large screens : Desktop and 4k screens */
+
+@media only screen and (min-width: 64.063em) and (max-width: 90em) {
+}
+
+/* 5k screens and above */
+@media only screen and (min-width: 91em) {
+}

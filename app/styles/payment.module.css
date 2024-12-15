@@ -1,0 +1,249 @@
+@media screen {
+  .paymentContainer {
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .paymentContainer h1 {
+    font-size: 1.2rem;
+    text-align: center;
+    text-transform: capitalize;
+    color: var(--tertiary-color);
+    font-family: var(--font-poppins-medium);
+  }
+
+  .accountCard {
+    gap: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .accountCardTop {
+    width: 100%;
+    display: flex;
+    height: 200px;
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .accountCardBottom {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    border-radius: 12px;
+    flex-direction: column;
+    border: 1px solid var(--primary-light-color);
+    background-color: var(--primary-dark-color);
+  }
+
+  .accountCardNav {
+    display: flex;
+    padding: 10px 0;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .accountCardNavDetails {
+    gap: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-light-color);
+  }
+
+  .accountCardNavDetails span {
+    font-size: 0.9rem;
+    font-family: var(--font-poppins-light);
+  }
+
+  .accountCardNavDetails {
+    color: var(--primary-light-color);
+  }
+
+  .accountCardNavDetailsIcon {
+    font-size: 18px;
+  }
+
+  .accountCardNavDetailsSpan {
+    gap: 5px;
+    display: flex;
+    padding: 5px 20px;
+    border-radius: 12px;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-dark-color);
+    background-color: var(--primary-light-color);
+  }
+
+  
+  .accountCardNavDetailsSpan span {
+    font-size: 0.9rem;
+    font-family: var(--font-poppins-light);
+  }
+
+
+  .accountContent {
+    gap: 10px;
+    display: flex;
+    text-align: start;
+    flex-direction: column;
+  }
+
+  .accountContent h2 {
+    padding: 10px;
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .accountContent h2 span {
+    font-size: 0.8rem;
+    color: var(--tertiary-light-color);
+    font-family: var(--font-poppins-extralight);
+  }
+
+  .accountContentDetails {
+    position: relative;
+    border-radius: 12px;
+    background-color: var(--primary-color);
+  }
+
+  .accountContentHeader {
+    gap: 5px;
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+  }
+
+  .accountContentHeader p {
+    font-family: var(--font-poppins-extralight);
+    color: var(--tertiary-light-color);
+  }
+  .accountContentHeaderDetails {
+    gap: 4px;
+    display: flex;
+    align-items: center;
+    color: var(--primary-light-color);
+  }
+
+  .accountContentHeaderDetails h3 {
+    font-size: 1rem;
+    font-family: var(--font-poppins-light);
+  }
+
+  .copyButton {
+    top: 10px;
+    right: 10px;
+    display: flex;
+    cursor: pointer;
+    font-size: 18px;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    color: var(--tertiary-color);
+    background-color: transparent;
+  }
+
+  .footer p {
+    font-size: 0.8rem;
+    text-align: center;
+    color: var(--tertiary-light-color);
+    font-family: var(--font-poppins-extralight);
+  }
+
+  /* tracking */
+
+  .trackingWrapper {
+    gap: 10px;
+    display: flex;
+    padding-top: 10px;
+    flex-direction: column;
+  }
+
+  .trackingProgress {
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+
+  }
+
+  .trackingStage {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    border-radius: 12px;
+    justify-content: space-between;
+    color: var(--primary-light-color);
+    border: 1px solid var(--primary-light-color);
+  }
+
+  .activeStage {
+    color: var(--primary-color);
+    background-color: var(--tertiary-light-color);
+    border: 1px solid var(--tertiary-light-color);
+  }
+
+  .stageContainer {
+    gap: 14px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .stageIcon {
+    font-size: 24px;
+  }
+
+  .stageDetails {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stageDetails h4 {
+    font-size: 1rem;
+    font-family: var(--font-poppins-light);
+  }
+
+  .stageDetails p {
+    font-size: 0.9rem;
+    font-family: var(--font-poppins-extralight);
+  }
+
+  .trackingInfo {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .trackingInfo {
+    font-size: 0.9rem;
+    font-family: var(--font-poppins-extralight);
+  }
+
+  .trackingInfoItem {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .trackingInfoItemHead {
+    gap: 4px;
+    display: flex;
+    align-items: center;
+    color: var(--tertiary-light-color);
+  }
+}
+
+@media only screen and (min-width: 48em) {
+  .accountCard {
+    flex-direction: row;
+  }
+
+  .accountCardTop {
+    height: 500px;
+  }
+}

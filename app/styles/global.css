@@ -1,0 +1,128 @@
+@media screen {
+  * {
+    /* dynamic style */
+    --primary-color: #11191fff;
+    --background-color: #ffffff;
+    --tertiary-color: #c3f402ff;
+    --secondary-color: #003b49ff;
+    --primary-light-color: #40505c;
+    --primary-dark-color: #1a242c;
+    --tertiary-light-color: #ccf527;
+    --shadow-effect: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  /* ::-webkit-scrollbar {
+      display: none;
+    } */
+
+  body {
+    color: var(--background-color);
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-family: var(--font-poppins-regular);
+    background-color: var(--primary-color);
+  }
+
+  a,
+  router-link {
+    text-decoration: none;
+  }
+
+  input {
+    outline: none;
+  }
+
+  button {
+    outline: none;
+    border: none;
+  }
+
+  input:focus,
+  input:hover {
+    outline: none;
+  }
+
+  textarea {
+    flex: 1;
+    border: none;
+    outline: none;
+    resize: none;
+    padding: 0.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 4px;
+    background: transparent;
+  }
+
+  textarea::placeholder {
+    color: var(--light-color);
+  }
+
+  textarea:focus,
+  textarea:hover {
+    outline: none;
+    border-color: none;
+  }
+
+  select {
+    outline: none;
+  }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--tertiary-color) var(--tertiary-color);
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--primary-color);
+  border-radius: 15px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  border-radius: 15px;
+}
+
+/* using it as global style for larger devices  */
+@media only screen and (min-width: 48em) {
+  /* Works on Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--tertiary-color) var(--primary-color);
+  }
+
+  *::-webkit-scrollbar-track {
+    background: var(--tertiary-color);
+    border-radius: 15px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--tertiary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 15px;
+  }
+}
+
+/* ipad pro screens & laptop */
+@media only screen and (min-width: 49em) and (max-width: 64em) {
+}
+
+/* large screens : Desktop and 4k screens */
+
+@media only screen and (min-width: 64.063em) and (max-width: 90em) {
+}
+
+/* 5k screens and above */
+@media only screen and (min-width: 91em) {
+}

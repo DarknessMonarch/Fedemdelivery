@@ -1,0 +1,157 @@
+@media screen {
+  .layoutNav {
+    display: flex;
+    min-height: 80px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .navMain {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    margin: 10px;
+    z-index: 995;
+    padding: 10px;
+    position: fixed;
+    border-radius: 12px;
+    backdrop-filter: blur(6px);
+    background: rgba(17, 25, 31, 0.2);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .navContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: relative;
+    align-items: center;
+    transition: top 0.8s ease;
+    justify-content: space-between;
+  }
+
+  .menuContainer {
+    width: 100%;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+  }
+
+  .menuIcon {
+    font-size: 30px;
+  }
+
+  .menuIcon:hover {
+    color: var(--tertiary-color);
+  }
+
+  .logoImage {
+    height: 40px;
+    width: fit-content;
+  }
+
+  .mobileDrawerLink {
+    top: 80px;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    border-radius: 12px;
+    position: absolute;
+    height: fit-content;
+    background: var(--primary-dark-color);
+  }
+
+  .linkContainer {
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .linkItems {
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .link {
+    text-transform: capitalize;
+    color: var(--background-color);
+    font-family: var(--font-poppins-light);
+  }
+
+  .link:hover {
+    color: var(--tertiary-color);
+  }
+
+  .activeLink {
+    color: var(--tertiary-color);
+  }
+
+  .navBtn {
+    gap: 10px;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    font-family: var(--font-poppins-light);
+    background-color: var(--background-color);
+  }
+
+  .navBtn:hover {
+    background-color: var(--tertiary-color);
+  }
+
+  .btnIcon {
+    font-size: 20px;
+  }
+
+  .hideDrawerLink {
+    display: none;
+  }
+  .showDrawerLink {
+    display: flex;
+  }
+}
+
+/* using it as global style for larger devices  */
+@media only screen and (min-width: 48em) {
+  .menuContainer {
+    width: fit-content;
+  }
+
+  .logoImage {
+    height: 50px;
+  }
+
+  .linkContainer {
+    gap: 0;
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .linkItems {
+    gap: 30px;
+    height: 60px;
+    width: inherit;
+    display: inherit;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .navBtn {
+    width: 120px;
+  }
+}

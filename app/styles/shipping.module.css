@@ -1,0 +1,126 @@
+@media screen {
+  .formContainer {
+    gap: 20px;
+    width: 100%;
+    display: flex;
+    padding: 20px 10px;
+    flex-direction: column;
+    border-radius: 0 12px 12px 12px;
+    background-color: var(--primary-color);
+  }
+
+  .formContainer h1 {
+    font-size: 2rem;
+    font-family: var(--font-poppins-regular);
+  }
+
+  .formContainer p {
+    cursor: pointer;
+    font-size: 0.8rem;
+    text-align: center;
+    text-decoration: underline;
+  }
+
+  .formContainer p:hover {
+    color: var(--tertiary-color);
+  }
+
+  .formInput {
+    gap: 20px;
+    width: 100%;
+    display: flex;
+    padding: 10px 20px;
+    border-radius: 8px;
+    align-items: center;
+    background-color: transparent;
+    border: 1px solid var(--primary-light-color);
+  }
+
+  .formInput:hover {
+    border: 1px solid var(--tertiary-color);
+  }
+
+  .formInput input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 10px;
+    background: transparent;
+    color: var(--primary-light-color);
+  }
+
+  .formInput input:focus {
+    color: var(--primary-light-color);
+    background-color: transparent;
+  }
+
+  .formInput input:-webkit-autofill,
+  .formInput input:-webkit-autofill:hover,
+  .formInput input:-webkit-autofill:focus,
+  .formInput input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: var(--primary-light-color) !important;
+  }
+
+  .formInput input::placeholder {
+    font-size: 0.8rem;
+    text-transform: capitalize;
+    color: var(--primary-light-color);
+  }
+
+  .dropdownContainer {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    padding: 10px;
+    cursor: pointer;
+    position: relative;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .dropdownContainer span {
+    font-size: 1rem;
+  }
+
+  .formIcon {
+    font-size: 20px;
+    color: var(--primary-light-color);
+  }
+
+  .formButton {
+    gap: 10px;
+    width: 100%;
+    cursor: pointer;
+    font-size: 1rem;
+    max-height: 50px;
+    min-height: 50px;
+    border-radius: 12px;
+    color: var(--primary-color);
+    background-color: var(--tertiary-color);
+  }
+
+  .formButton:hover {
+    background-color: var(--tertiary-light-color);
+  }
+
+
+}
+
+/* using it as global style for larger devices  */
+@media only screen and (min-width: 48em) {
+}
+
+/* ipad pro screens & laptop */
+@media only screen and (min-width: 49em) and (max-width: 64em) {
+}
+
+/* large screens : Desktop and 4k screens */
+
+@media only screen and (min-width: 64.063em) and (max-width: 90em) {
+}
+
+/* 5k screens and above */
+@media only screen and (min-width: 91em) {
+}

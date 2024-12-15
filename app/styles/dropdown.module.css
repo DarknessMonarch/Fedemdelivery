@@ -1,0 +1,92 @@
+@media screen {
+  .dropdownContainer {
+    gap: 10px;
+    width: 100%;
+    display: flex;
+    cursor: pointer;
+    position: relative;
+    border-radius: 8px;
+    flex-direction: column;
+    border: 1px solid var(--primary-light-color);
+  }
+
+  .dropdownContainer:hover {
+    border: 1px solid var(--tertiary-color);
+  }
+
+  .dropdownContainer span {
+    font-size: 0.8rem;
+    text-transform: capitalize;
+  }
+
+  .dropdownInput {
+    width: 100%;
+    display: flex;
+    padding:  20px;
+    align-items: center;
+    border-radius: inherit;
+    color: var(--primary-light-color);
+    justify-content: space-between;
+
+  }
+
+  .dropdownLine {
+    gap:30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dropdownIcon {
+    font-size: 20px;
+  }
+
+  .dropdownContainer:hover .dropdownIcon {
+    color: var(--tertiary-color);
+  }
+
+  .dropdownArea {
+    gap: 10px;
+    top: 70px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    z-index: 99;
+    overflow: hidden;
+    overflow-y: auto;
+    max-height: 250px;
+    overflow-x: hidden;
+    border-radius: 8px;
+    position: absolute;
+    flex-direction: column;
+    background-color: var(--primary-dark-color);
+  }
+
+  .dropdownArea span {
+    padding: 20px;
+    text-align: start;
+    border-radius: 8px;
+    color: var(--primary-light-color);
+    background-color: var(--primary-color);
+
+  }
+
+  .dropdownArea span:hover {
+    color: var(--primary-color);
+    background-color: var(--tertiary-color);
+  }
+
+  .dropdownArea:hover  {
+    color: var(--tertiary-color);
+  }
+
+  .dropdownArea:hover .formIcon {
+    color: var(--tertiary-color);
+  }
+
+}
+
+/* using it as global style for larger devices  */
+@media only screen and (min-width: 48em) {
+
+}
