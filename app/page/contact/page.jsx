@@ -68,7 +68,7 @@ export default function Contact() {
           priority
         />
         <div className={styles.contactBannerInfo}>
-          <h1>World's Leading Contract</h1>
+          <h1>World&apos;s Leading Contract</h1>
           <span>Logistic Provider</span>
         </div>
       </div>
