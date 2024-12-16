@@ -3,41 +3,62 @@
 import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import Loader from "@/app/components/Loader";
+import { useAuthStore } from "@/app/store/Auth";
 import { useSearchParams } from "next/navigation";
 import styles from "@/app/styles/payment.module.css";
 import PaymentImage from "@/public/assets/payment.png";
 import { FaWeightHanging as WeightIcon } from "react-icons/fa";
-import {
-  MdOutlinePlace as CountryIcon,
-  MdAccountBalanceWallet as AccountIcon,
-} from "react-icons/md";
-import { IoCopy as CopyIcon, IoCheckbox as CopySuccess } from "react-icons/io5";
+import { MdOutlinePlace as CountryIcon } from "react-icons/md";
 import { RiBankFill as BankIcon } from "react-icons/ri";
 
 export default function Payment() {
+  const { email } = useAuthStore();
   const searchParams = useSearchParams();
-  const [copied, setCopied] = useState({});
+  const requestPayment = useAuthStore((state) => state.requestPayment);
 
-  const bankDetails = {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const dataDetails = {
     totalPrice: searchParams.get("price") || "0.00",
     country: searchParams.get("country") || "Not specified",
     weight: searchParams.get("weight") || "Not available",
-    bankName: "Global Shipping Bank",
-    accountNumber: "1234-5678-9012-3456",
-    accountName: "Fx Delivery Logistics Ltd",
+    shipmentType: searchParams.get("shipmentMode") || "Not available",
   };
 
-  const handleCopy = (field, value) => {
-    navigator.clipboard.writeText(value).then(() => {
-      setCopied((prev) => ({ ...prev, [field]: true }));
-      setTimeout(
-        () => setCopied((prev) => ({ ...prev, [field]: false })),
-        2000
+  const requestPaymentDetails = async () => {
+    if (!email) {
+      toast.error("Email is required to request payment details.");
+      return;
+    }
+
+    if (!accessToken) {
+      toast.error("You must be logged in to request payment details.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const paymentData = {
+        email,
+        ...dataDetails, 
+      };
+
+      const result = await requestPayment(paymentData);
+
+      if (result.success) {
+        toast.success("Payment details requested successfully.");
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      toast.error(
+        "An error occurred while requesting payment details."
       );
-      toast.success(`${field} copied to clipboard!`);
-    });
+    } finally {
+      setIsLoading(false);
+    }
   };
-
   return (
     <div className={styles.paymentContainer}>
       <h1>Payment Details</h1>
@@ -57,71 +78,38 @@ export default function Payment() {
           <div className={styles.accountCardNav}>
             <div className={styles.accountCardNavDetails}>
               <CountryIcon className={styles.accountCardNavDetailsIcon} />
-              <span>{bankDetails.country}</span>
+              <span>{dataDetails.country}</span>
             </div>
             <div className={styles.accountCardNavDetailsSpan}>
               <WeightIcon className={styles.accountCardNavDetailsIcon} />
-              <span>{bankDetails.weight}</span>
+              <span>{dataDetails.weight}</span>
             </div>
           </div>
           <div className={styles.accountContent}>
             <h2>
-              ${bankDetails.totalPrice}<span>/Total</span>
+              ${dataDetails.totalPrice}
+              <span>/Total</span>
             </h2>
             <div className={styles.accountContentDetails}>
               <div className={styles.accountContentHeader}>
                 <div className={styles.accountContentHeaderDetails}>
                   <BankIcon />
-                  <h3>Bank Name</h3>
+                  <h3>Request payment details</h3>
                 </div>
-                <p>{bankDetails.bankName}</p>
               </div>
-            </div>
-
-            <div className={styles.accountContentDetails}>
-              <div className={styles.accountContentHeader}>
-                <div className={styles.accountContentHeaderDetails}>
-                  <BankIcon />
-                  <h3>Account Name</h3>
-                </div>
-                <p>{bankDetails.accountName}</p>
-              </div>
-
               <button
-                className={styles.copyButton}
-                onClick={() =>
-                  handleCopy("Account Name", bankDetails.accountName)
-                }
+                className={styles.formButton}
+                onClick={requestPaymentDetails}
+                disabled={isLoading}
               >
-                {copied["Account Name"] ? <CopySuccess /> : <CopyIcon />}
-              </button>
-            </div>
-            <div className={styles.accountContentDetails}>
-              <div className={styles.accountContentHeader}>
-                <div className={styles.accountContentHeaderDetails}>
-                  <AccountIcon />
-                  <h3>Account Number</h3>
-                </div>
-                <p>{bankDetails.accountNumber}</p>
-              </div>
-
-              <button
-                className={styles.copyButton}
-                onClick={() =>
-                  handleCopy("Account Number", bankDetails.accountNumber)
-                }
-              >
-                {copied["Account Number"] ? <CopySuccess /> : <CopyIcon />}
+                {isLoading ? <Loader/> : "Request"}
               </button>
             </div>
           </div>
         </div>
       </div>
       <div className={styles.footer}>
-        <p>
-          Complete your payment by transferring the total amount to the account
-          details above.
-        </p>
+        <p>Your payment details will be sent to your email address.</p>
       </div>
     </div>
   );

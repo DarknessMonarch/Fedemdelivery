@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import Popup from "@/app/components/Popup";
 import Track from "@/app/components/Track";
 
-// pages
+// Pages
 import Home from "@/app/page/home/page";
 import About from "@/app/page/about/page";
 import Service from "@/app/page/service/page";
@@ -21,32 +21,23 @@ export default function App() {
 
   useEffect(() => {
     const currentTrackingID = searchParams.get("trackingId") || "";
-    const totalPrice = searchParams.get("trackingId") || "";
+    const totalPrice = searchParams.get("price") || "";
+
     setTrackingID(currentTrackingID);
+    setPrice(totalPrice);
   }, [searchParams]);
 
+  const renderPopup = (content) => <Popup content={content} />;
+
   return (
-    <>
-      <div className={styles.layoutMain}>
-        <NavBar />
-        <div>
-          <Home />
-        </div>
-        <div>
-          <About />
-        </div>
-        <div>
-          <Service />
-        </div>
-        <div>
-          <Contact />
-        </div>
-      </div>
-      {trackingID ? (
-        <Popup content={<Track />} />
-      ) : (
-        <Popup content={<Payment />} />
-      )}
-    </>
+    <div className={styles.layoutMain}>
+      <NavBar />
+      <Home />
+      <About />
+      <Service />
+      <Contact />
+      {trackingID && renderPopup(<Track />)}
+      {price && renderPopup(<Payment />)}
+    </div>
   );
 }

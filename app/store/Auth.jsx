@@ -300,6 +300,53 @@ export const useAuthStore = create(
         }
       },
 
+
+
+
+      requestPayment: async (paymentData) => {
+        try {
+          const { accessToken } = get();
+          
+          if (!accessToken) {
+            return {
+              success: false,
+              message: "Authentication required. Please log in.",
+            };
+          }
+
+          const response = await fetch(`${SERVER_API}/auth/payment/details`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`, 
+            },
+            body: JSON.stringify(paymentData),
+          });
+
+          const data = await response.json();
+
+          if (data.status === "success") {
+            return {
+              success: true,
+              message: data.message,
+              paymentDetails: data.data || null, 
+            };
+          }
+          
+          return {
+            success: false,
+            message: data.message || "Failed to request payment details",
+          };
+        } catch (error) {
+          console.error("Payment request error:", error);
+          return {
+            success: false,
+            message: "An error occurred while requesting payment details",
+          };
+        }
+      },
+
+
       scheduleTokenRefresh: () => {
         const { tokenExpirationTime, refreshTimeoutId } = get();
         if (refreshTimeoutId) {

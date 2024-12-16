@@ -1,15 +1,110 @@
 @media screen {
- 
-  
+  .dashboardContainer {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    gap: 20px;
+    display: flex;
+    padding: 10px;
+    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    flex-direction: column;
+  }
+
+  .dashboardTitle {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dashboardTitle h1,
+  .dashboardTitle span {
+    font-weight: 500;
+    font-size: 1.2rem;
+    text-transform: capitalize;
+  }
+
+  .dashboardTitle span {
+    display: flex;
+    color: var(--secondary-color);
+  }
+
+  .dashboardLayout {
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 10px;
+    overflow: hidden;
+    border-radius: 15px;
+    flex-direction: column;
+    border: 1px solid var(--primary-light-color);
+  }
+
+  /* unauthorizedContainer */
+
+  .unauthorizedInfo {
+    gap: 10px;
+    height: 100%;
+    display: flex;
+    padding: 10px;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .unauthorizedInfo h2,
+  .walletAccess h2 {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--secondary-color);
+  }
+
+  .unauthorizedInfo p {
+    font-size: 0.8rem;
+  }
+
+  .formButton {
+    gap: 10px;
+    padding: 0 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    min-height: 50px;
+    max-height: 50px;
+    border-radius: 8px;
+    color: var(--primary-color);
+    background-color: var(--background-color);
+  }
+
+  .formButton:hover {
+    color: var(--background-color);
+    background-color: var(--secondary-color);
+  }
 }
 
 /* using it as global style for larger devices  */
 @media only screen and (min-width: 48em) {
-  .aboutWrapper {
-    flex-wrap: nowrap;
+  .dashboardContainer {
+    overflow: hidden;
+    overflow-y: hidden;
   }
 
+  .dashboardTitle {
+    gap: 10px;
+    align-items: center;
+    flex-direction: row;
+  }
 
+  .dashboardLayout {
+    flex-direction: row;
+  }
+
+  .formButton {
+    padding: 0 100px;
+  }
 }
 
 /* ipad pro screens & laptop */

@@ -1,0 +1,191 @@
+@media screen {
+  .tableWrapper {
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    border-radius: 15px;
+    height: fit-content;
+    color: var(-primary-light-color);
+  }
+
+  .tableHeader {
+    gap: 10px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+  }
+
+  .copyContainer:first-child {
+    color: var(--primary-color);
+    background-color: var(--tertiary-color);
+  }
+
+  .copyContainer:hover:first-child {
+    color: var(--primary-color);
+    border: 1px solid var(--tertiary-light-color);
+    background-color: var(--tertiary-light-color);
+  }
+
+  .copyContainer{
+    gap: 10px;
+    height: 50px;
+    display: flex;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    align-items: center;
+    border-radius: 15px;
+    justify-content: center;
+    text-transform: capitalize;
+    color: var(--tertiary-color);
+    font-family: var(--font-poppins-regular);
+    border: 1px solid var(--tertiary-color);
+  }
+
+
+  .copyIcon {
+    height: 20px;
+    width: 20px;
+  }
+
+  .copyContainer:hover {
+    color: var(--primary-color);
+    background-color: var(--tertiary-color);
+  }
+
+  .accountTable {
+    border-collapse: collapse;
+    min-width: 1000px;
+    table-layout: fixed;
+  }
+
+  .tableWrapper tbody tr:nth-child(odd) {
+    background: var(--primary-dark-color);
+  }
+
+  .accountTable th {
+    overflow: hidden;
+    text-align: center;
+    padding: 18px 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-transform: capitalize;
+    color: var(--primary-color);
+    background: var(--tertiary-color);
+    font-family: var(--font-poppins-light);
+  }
+
+  .accountTable td {
+    width: 100%;
+    text-align: center;
+    padding: 18px 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-transform: capitalize;
+    font-family: var(--font-poppins-light);
+  }
+
+  .teamInner {
+    gap: 10px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .toggleContainer {
+    gap: 10px;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    border-radius: 30px;
+    padding-right: 10px;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    color: var(--primary-light-color);
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-light-color);
+  }
+
+  .toggleThumb {
+    background-color: var(--primary-light-color);
+    border-radius: 360%;
+    min-height: 60px;
+    min-width: 60px;
+  }
+
+
+  .toggleInfoInner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .toggleContainerActive {
+   display: flex;
+   padding-right: 0;
+   padding-left: 10px;
+   align-items: center;
+   flex-direction: row;
+   color: var(--tertiary-color);
+   border: 1px solid var(--tertiary-color);
+
+  }
+
+  .toggleContainerActive .toggleThumb {
+    background-color: var(--tertiary-color);
+
+  }
+
+  .deleteIcon {
+    font-size: 32px;
+    cursor: pointer;
+    color: var(--tertiary-light-color);
+  }
+
+}
+
+/* Tablet and larger devices (768px and up) */
+@media only screen and (min-width: 48em) {
+  .tableWrapper {
+    width: 100%;
+  }
+
+  .accountTable {
+    width: 100%;
+  }
+
+  .accountTable th {
+    padding: 18px 8px;
+  }
+
+  .tableRow td {
+    padding: 18px 8px;
+  }
+}
+
+/* iPad Pro screens & laptop (768px - 1024px) */
+@media only screen and (min-width: 49em) and (max-width: 64em) {
+  .accountTable {
+    min-width: 900px;
+  }
+}
+
+/* Large screens: Desktop (1024px - 1440px) */
+@media only screen and (min-width: 64.063em) and (max-width: 90em) {
+  .accountTable {
+    min-width: 1000px;
+  }
+}
+
+/* 5k screens and above (1440px+) */
+@media only screen and (min-width: 91em) {
+  .accountTable {
+    min-width: 1200px;
+  }
+}

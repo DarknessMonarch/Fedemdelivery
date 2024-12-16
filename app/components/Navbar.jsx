@@ -15,7 +15,7 @@ import { RiMenu4Fill as MenuIcon } from "react-icons/ri";
 import { HiOutlineLogout as LogoutIcon } from "react-icons/hi";
 
 export default function NavbarComponent() {
-  const { isAuth, username, clearUser } = useAuthStore();
+  const { isAuth, clearUser } = useAuthStore();
   const [isMobile, setIsMobile] = useState(false);
   const { toggleOpen, isOpen } = useDrawerStore();
   const pathname = usePathname();
@@ -122,6 +122,17 @@ ${!isMobile && !isOpen ? styles.showDrawerLink : ""}
               >
                 Contact us
               </Link>
+              {!isAuth && (
+                <Link
+                  href="/page/dashboard"
+                  onClick={toggleDrawer}
+                  className={`${styles.link} ${
+                    pathname === "/page/dashboard" ? styles.activeLink : ""
+                  }`}
+                >
+                  Dashboard
+                </Link>
+              )}
             </div>
 
             <button 

@@ -8,6 +8,7 @@
     border-radius: 8px;
     flex-direction: column;
     border: 1px solid var(--primary-light-color);
+    
   }
 
   .dropdownContainer:hover {

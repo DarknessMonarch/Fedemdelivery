@@ -148,6 +148,22 @@
     background-color: transparent;
   }
 
+  .formButton {
+    gap: 10px;
+    width: 100%;
+    cursor: pointer;
+    font-size: 1rem;
+    max-height: 50px;
+    min-height: 50px;
+    border-radius: 12px;
+    color: var(--primary-color);
+    background-color: var(--tertiary-color);
+  }
+
+  .formButton:hover {
+    background-color: var(--tertiary-light-color);
+  }
+
   .footer p {
     font-size: 0.8rem;
     text-align: center;

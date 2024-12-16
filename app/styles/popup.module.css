@@ -10,7 +10,6 @@
     display: flex;
     padding: 10px;
     position: absolute;
-    align-items: center;
     justify-content: center;
     backdrop-filter: blur(6px);
   }
@@ -52,6 +51,10 @@
 }
 
 @media only screen and (min-width: 48em) {
+  .popupBackdrop {
+    align-items: center;
+  }
+
   .popupContainer {
     width: calc(100% / 2);
     height: fit-content;

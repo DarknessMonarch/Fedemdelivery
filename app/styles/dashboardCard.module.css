@@ -1,0 +1,116 @@
+@media screen {
+  .dashcardContainer {
+    gap: 10px;
+    display: flex;
+    padding: 10px 0;
+    overflow-x: auto;
+    min-height: 200px;
+    flex-wrap: nowrap;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    justify-content: flex-start;
+    scroll-snap-type: x mandatory;
+  }
+
+  .dashcard {
+    gap: 10px;
+    flex-grow: 1;
+    width: 300px;
+    padding: 20px;
+    display: flex;
+    cursor: pointer;
+    min-width: 300px;
+    border-radius: 12px;
+    flex-direction: column;
+    justify-content: center;
+    scroll-snap-align: center;
+    color: var(--tertiary-color);
+    border: 1px solid var(--primary-light-color);
+  }
+
+  .dashcard:hover {
+    background-color: var(--tertiary-color);
+  }
+
+  .dashcardActive {
+    background-color: var(--tertiary-color);
+    border: 1px solid var(--tertiary-color);
+
+  }
+
+  .dashcardTitle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .dashcardTitle h1 {
+    font-size: 1.2rem;
+    text-transform: capitalize;
+    font-family: var(--font-poppins-regular);
+  }
+
+  .dashcardContainer h2 {
+    font-size: 2rem;
+    font-family: var(--font-poppins-bold);
+  }
+
+  .dashCardIconWrapper {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border-radius: 15px;
+    justify-content: center;
+    background: transparent;
+    background-color: var(--tertiary-color);
+  }
+
+  .dashCardIcon {
+    font-size: 40px;
+    color: var(--primary-color);
+  }
+
+  .dashcard:hover .dashCardIconWrapper {
+    background-color: var(--primary-color);
+  }
+
+  .dashcard:hover {
+    color: var(--primary-color);
+  }
+
+  .dashcard:hover .dashCardIcon {
+    color: var(--tertiary-color);
+  }
+
+  .dashcardActive  .dashCardIconWrapper {
+    background-color: var(--primary-color);
+  }
+
+  .dashcardActive {
+    color: var(--primary-color);
+  }
+
+  
+  .dashcardActive  .dashCardIcon {
+    color: var(--tertiary-color);
+  }
+
+}
+
+/* For larger devices */
+@media only screen and (min-width: 48em) {
+  .dashcardContainer {
+    justify-content: space-between;
+  }
+}
+/* iPad Pro & Laptop screens */
+@media only screen and (min-width: 49em) and (max-width: 64em) {
+}
+
+/* Desktop and 4k screens */
+@media only screen and (min-width: 64.063em) and (max-width: 90em) {
+}
+
+/* 5k screens and above */
+@media only screen and (min-width: 91em) {
+}

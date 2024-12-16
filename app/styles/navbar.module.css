@@ -13,7 +13,6 @@
     height: 60px;
     margin: 10px;
     z-index: 995;
-    padding: 10px;
     position: fixed;
     border-radius: 12px;
     backdrop-filter: blur(6px);
@@ -103,11 +102,11 @@
     justify-content: center;
     color: var(--primary-color);
     font-family: var(--font-poppins-light);
-    background-color: var(--background-color);
+    background-color: var(--tertiary-color);
   }
 
   .navBtn:hover {
-    background-color: var(--tertiary-color);
+    background-color: var(--tertiary-light-color);
   }
 
   .btnIcon {
