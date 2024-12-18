@@ -124,7 +124,7 @@ export default function Contact() {
           ))}
         </div>
         <div className={styles.footerBottom}>
-          <p>&copy; Fxdelivery 2024 | All rights reserved</p>
+          <p>&copy; Fedemdelivery 2024 | All rights reserved</p>
         </div>
       </div>
     </div>

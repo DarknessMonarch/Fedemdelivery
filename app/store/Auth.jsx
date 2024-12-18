@@ -12,6 +12,7 @@ export const useAuthStore = create(
       username: "",
       email: "",
       isAuthorized: false,
+      isAdmin: false,
       accessToken: "",
       refreshToken: "",
       lastLogin: null,
@@ -26,6 +27,7 @@ export const useAuthStore = create(
           username: userData.username,
           email: userData.email,
           isAuthorized: userData.isAuthorized,
+          isAdmin: userData.isAdmin,
           accessToken: userData.accessToken,
           refreshToken: userData.refreshToken,
           lastLogin: userData.lastLogin,
@@ -39,6 +41,7 @@ export const useAuthStore = create(
           username: userData.username,
           email: userData.email,
           isAuthorized: userData.isAuthorized,
+          isAdmin: userData.isAdmin,
         });
       },
 
@@ -50,6 +53,7 @@ export const useAuthStore = create(
           username: "",
           email: "",
           isAuthorized: false,
+          isAdmin: false,
           accessToken: "",
           refreshToken: "",
           lastLogin: null,
@@ -102,6 +106,7 @@ export const useAuthStore = create(
       scheduleTokenRefresh: () => {
         const { tokenExpirationTime, refreshTimeoutId } = get();
 
+        // Cancel any existing timeout
         if (refreshTimeoutId) {
           clearTimeout(refreshTimeoutId);
         }
@@ -117,6 +122,14 @@ export const useAuthStore = create(
         }, timeUntilRefresh);
 
         set({ refreshTimeoutId: newTimeoutId });
+      },
+
+      cancelTokenRefresh: () => {
+        const { refreshTimeoutId } = get();
+        if (refreshTimeoutId) {
+          clearTimeout(refreshTimeoutId);
+          set({ refreshTimeoutId: null });
+        }
       },
 
       login: async (email, password) => {
@@ -170,17 +183,27 @@ export const useAuthStore = create(
       logout: async () => {
         try {
           const { accessToken } = get();
-          await fetch(`${SERVER_API}/auth/logout`, {
+          const response = await fetch(`${SERVER_API}/auth/logout`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${accessToken}`,
             },
           });
-          get().clearUser();
-          return true;
-        } catch (error) {
+
+          const data = await response.json();
+          
+          if (data.status === "success") {
+            get().clearUser();
+            return true;
+          }
           return false;
+        } catch (error) {
+          return {
+            
+            success: false,
+            message: "An error occurred during logout" || error,
+          };
         }
       },
 
@@ -210,7 +233,7 @@ export const useAuthStore = create(
           console.error("Password reset request error:", error);
           return {
             success: false,
-            message: data.message,
+            message: "An error occurred during password reset request",
           };
         }
       },
@@ -241,7 +264,48 @@ export const useAuthStore = create(
           console.error("Password reset error:", error);
           return {
             success: false,
-            message: data.message,
+            message: "An error occurred during password reset",
+          };
+        }
+      },
+
+      fetchUsers: async () => {
+        try {
+          const { accessToken } = get();
+          
+          if (!accessToken) {
+            return {
+              success: false,
+              message: "Authentication required. Please log in.",
+            };
+          }
+
+          const response = await fetch(`${SERVER_API}/auth/users`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+
+          const data = await response.json();
+
+          if (data.users) {
+            return {
+              success: true,
+              users: data.users,
+            };
+          }
+          
+          return {
+            success: false,
+            message: "Failed to fetch users",
+          };
+        } catch (error) {
+          console.error("Fetch users error:", error);
+          return {
+            success: false,
+            message: "An error occurred while fetching users",
           };
         }
       },
@@ -257,10 +321,17 @@ export const useAuthStore = create(
             },
             body: JSON.stringify(authData),
           });
-
+      
           const data = await response.json();
-
+      
           if (data.status === "success") {
+            if (data.data && data.data.isAuthorized !== undefined) {
+              // Preserve the current isAdmin status when updating
+              get().updateUser({ 
+                isAuthorized: data.data.isAuthorized,
+                isAdmin: get().isAdmin  // This ensures isAdmin remains unchanged
+              });
+            }
             return {
               success: true,
               message: data.message,
@@ -290,18 +361,18 @@ export const useAuthStore = create(
             },
           });
 
-          if (response.ok) {
+          const data = await response.json();
+
+          if (data.status === "success") {
             get().clearUser();
-            return true;
+            return { success: true, message: data.message };
           }
-          return false;
+          return { success: false, message: data.message };
         } catch (error) {
-          return false;
+          console.error("Delete account error:", error);
+          return { success: false, message: "An error occurred while deleting account" };
         }
       },
-
-
-
 
       requestPayment: async (paymentData) => {
         try {
@@ -343,29 +414,6 @@ export const useAuthStore = create(
             success: false,
             message: "An error occurred while requesting payment details",
           };
-        }
-      },
-
-
-      scheduleTokenRefresh: () => {
-        const { tokenExpirationTime, refreshTimeoutId } = get();
-        if (refreshTimeoutId) {
-          clearTimeout(refreshTimeoutId);
-        }
-
-        const timeUntilRefresh = tokenExpirationTime - Date.now() - 60000; // Refresh 1 minute before expiration
-        const newTimeoutId = setTimeout(() => {
-          get().refreshAccessToken();
-        }, timeUntilRefresh);
-
-        set({ refreshTimeoutId: newTimeoutId });
-      },
-
-      cancelTokenRefresh: () => {
-        const { refreshTimeoutId } = get();
-        if (refreshTimeoutId) {
-          clearTimeout(refreshTimeoutId);
-          set({ refreshTimeoutId: null });
         }
       },
     }),

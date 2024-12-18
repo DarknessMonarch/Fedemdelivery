@@ -46,7 +46,7 @@ export default function About() {
               <span>Logistics</span>
             </h1>
             <p>
-              At Fxdelivery, we pride ourselves on delivering seamless and
+              At Fedemdelivery, we pride ourselves on delivering seamless and
               reliable shipping solutions designed to meet the unique needs of
               every client. Whether you need fast deliveries, cost-effective
               solutions, or specialized logistics, we are here to ensure your

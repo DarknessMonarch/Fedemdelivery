@@ -228,8 +228,8 @@
   }
 
   .formChange span {
-    font-size: 0.8rem;
     cursor: pointer;
+    font-size: 0.8rem;
     text-decoration: underline;
   }
 

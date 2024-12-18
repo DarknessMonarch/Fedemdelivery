@@ -252,6 +252,29 @@
     align-items: center;
     color: var(--tertiary-light-color);
   }
+
+  .noTracking {
+    gap: 20px;
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .noTracking h1 {
+    font-size: 1.2rem;
+    text-align: center;
+    text-transform: capitalize;
+    color: var(--tertiary-color);
+    font-family: var(--font-poppins-medium);
+  }
+
+  .noTracking p {
+    font-size: 0.9rem;
+    font-family: var(--font-poppins-extralight);
+  }
+
 }
 
 @media only screen and (min-width: 48em) {

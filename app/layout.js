@@ -17,17 +17,17 @@ import {
 
 
 export const metadata = {
-  metadataBase: new URL("https://fxdelivery.vercel.app/"),
-  title: "fxdelivery - Anywhere, Anytime – We Deliver the World to You!",
-  applicationName: "fxdelivery",
-  author: "fxdelivery",
+  metadataBase: new URL("https://fedemdelivery.vercel.app/"),
+  title: "Fedemdelivery - Anywhere, Anytime – We Deliver the World to You!",
+  applicationName: "fedemdelivery",
+  author: "fedemdelivery",
   images:
-    "https://raw.githubusercontent.com/DarknessMonarch/fxdelivery/refs/heads/master/public/assets/banner.png",
+    "https://raw.githubusercontent.com/DarknessMonarch/Fedemdelivery/refs/heads/master/public/assets/banner.png",
   description:
-    "fxdelivery makes shipping across the globe easy, fast and reliable",
-  metadataBase: new URL("https://fxdelivery.vercel.app/"),
+    "Fedemdelivery makes shipping across the globe easy, fast and reliable",
+  metadataBase: new URL("https://fedemdelivery.vercel.app/"),
   keywords: [
-    "fxdelivery",
+    "Fedemdelivery",
     "delivery",
     "shipping",
     "package delivey",
@@ -37,13 +37,13 @@ export const metadata = {
     "online delivery",
   ],
   openGraph: {
-    title: "fxdelivery - Anywhere, Anytime – We Deliver the World to You!",
+    title: "Fedemdelivery - Anywhere, Anytime – We Deliver the World to You!",
     description:
       "",
-    url: "https://fxdelivery.vercel.app/",
-    siteName: "fxdelivery",
+    url: "https://fedemdelivery.vercel.app/",
+    siteName: "fedemdelivery",
     images:
-      "https://raw.githubusercontent.com/DarknessMonarch/fxdelivery/refs/heads/master/public/assets/banner.png",
+      "https://raw.githubusercontent.com/DarknessMonarch/Fedemdelivery/refs/heads/master/public/assets/banner.png",
   },
   robots: {
     index: false,

@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import toast from "react-hot-toast";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Loader from "@/app/components/Loader";
 import { useAuthStore } from "@/app/store/Auth";
 import styles from "@/app/styles/auth.module.css";
 import auth1Image from "@/public/assets/auth1Image.jpg";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import {
   FaRegEye as ShowPasswordIcon,
@@ -25,9 +25,7 @@ export default function SignUp() {
   const [passwordError, setPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [termsError, setTermsError] = useState("");
-  const [referral, setReferral] = useState(null);
   const [terms, setTerms] = useState(false);
-  const searchParams = useSearchParams();
   const router = useRouter();
 
   const register = useAuthStore((state) => state.register);
@@ -37,13 +35,6 @@ export default function SignUp() {
     password: "",
     confirmPassword: "",
   });
-
-  useEffect(() => {
-    const referralParam = searchParams.get("referral");
-    if (referralParam) {
-      setReferral(referralParam);
-    }
-  }, [searchParams]);
 
   const handleTermsChange = (event) => {
     setTerms(event.target.checked);
@@ -82,15 +73,13 @@ export default function SignUp() {
     setIsLoading(true);
     try {
       const { confirmPassword, ...dataToSend } = formData;
-      if (referral) {
-        dataToSend.referredBy = referral;
-      }
 
       const result = await register(dataToSend);
 
       if (result.success) {
+        setFormData({ username: "", email: "", password: "", confirmPassword: "" });
         toast.success(result.message);
-        router.push("/page/home", { scroll: false });
+        router.push("/", { scroll: false });
       } else {
         toast.error(result.message);
       }
@@ -154,9 +143,9 @@ export default function SignUp() {
             />
             <div onClick={() => togglePasswordVisibility("password")}>
               {showPassword ? (
-                <HidePasswordIcon className={styles.authIcon} />
-              ) : (
                 <ShowPasswordIcon className={styles.authIcon} />
+              ) : (
+                <HidePasswordIcon className={styles.authIcon} />
               )}
             </div>
           </div>
@@ -172,9 +161,9 @@ export default function SignUp() {
             />
             <div onClick={() => togglePasswordVisibility("confirmPassword")}>
               {showConfirmPassword ? (
-                <HidePasswordIcon className={styles.authIcon} />
-              ) : (
                 <ShowPasswordIcon className={styles.authIcon} />
+              ) : (
+                <HidePasswordIcon className={styles.authIcon} />
               )}
             </div>
           </div>
@@ -199,7 +188,7 @@ export default function SignUp() {
               isLoading ? styles.activeFormAuthButton : ""
             }`}
           >
-          {isLoading ? <Loader /> : "Sign up"}
+            {isLoading ? <Loader /> : "Sign up"}
           </button>
           <h3>
             Already have an account?{" "}

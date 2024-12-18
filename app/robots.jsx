@@ -5,6 +5,6 @@ export default function robots() {
       allow: '/',
       disallow: '/private/',
     },
-    sitemap: 'https://fxdelivey.vercel.app/sitemap.xml',
+    sitemap: 'https://fedemdelivery.vercel.app/sitemap.xml',
   }
 }

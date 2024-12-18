@@ -15,9 +15,10 @@ import { RiMenu4Fill as MenuIcon } from "react-icons/ri";
 import { HiOutlineLogout as LogoutIcon } from "react-icons/hi";
 
 export default function NavbarComponent() {
-  const { isAuth, clearUser } = useAuthStore();
+  const { isAuth, isAdmin } = useAuthStore();
   const [isMobile, setIsMobile] = useState(false);
   const { toggleOpen, isOpen } = useDrawerStore();
+  const Logout = useAuthStore((state) => state.logout);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -33,16 +34,15 @@ export default function NavbarComponent() {
   }, [pathname]);
 
   const handleLogout = useCallback(async () => {
-    clearUser(); 
-    router.push("/authentication/login", { scroll: false });
-  }, [clearUser, router]);
+    await Logout();
+  }, [Logout]);
 
   const handleLogin = () => {
     router.push("/authentication/login", { scroll: false });
   };
   
   const goHome = () => {
-    router.push("/page/home", { scroll: false });
+    router.push("/", { scroll: false });
   };
 
   const toggleDrawer = () => {
@@ -122,7 +122,7 @@ ${!isMobile && !isOpen ? styles.showDrawerLink : ""}
               >
                 Contact us
               </Link>
-              {!isAuth && (
+              {isAdmin && (
                 <Link
                   href="/page/dashboard"
                   onClick={toggleDrawer}

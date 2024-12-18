@@ -4,14 +4,19 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Loader from "@/app/components/Loader";
+import { useAuthStore } from "@/app/store/Auth";
 import { useDrawerStore } from "@/app/store/Drawer";
 import styles from "@/app/styles/shipping.module.css";
+import { useTrackingStore } from "@/app/store/Tracking";
 import { IoGrid as TrackingIdIcon } from "react-icons/io5";
 
 export default function Tracking() {
   const router = useRouter();
+  const { accessToken} = useAuthStore();
   const { togglePopup } = useDrawerStore();
-  const [trackingID, setTrackingID] = useState(null)
+  const { getTracking } = useTrackingStore();
+  const [trackingID, setTrackingID] = useState(null);
+  
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ trackingId: "" });
 
@@ -45,22 +50,16 @@ export default function Tracking() {
       router.replace(
         `${currentUrl.pathname}?${currentUrl.searchParams.toString()}`
       );
-      if (trackingID !== null) {
-        togglePopup();        
+
+      const response = await getTracking(trackingId, accessToken);
+      if (response.success) {
+        togglePopup();
+        toast.success("Tracking ID found successfully!");
+      } else {
+        throw new Error(
+          response.message || "Failed to find tracking information"
+        );
       }
-
-
-      const response = await fetch("/api/submit-tracking", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ trackingId }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to submit the tracking ID. Please try again.");
-      }
-
-      toast.success("Tracking ID submitted successfully!");
     } catch (error) {
       toast.error(error.message || "An unexpected error occurred.");
     } finally {

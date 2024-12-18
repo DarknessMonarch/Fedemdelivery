@@ -2,7 +2,9 @@ import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "@/app/components/Loader";
+import { useAuthStore } from "@/app/store/Auth";
 import Dropdown from "@/app/components/Dropdown";
+import { useTrackingStore } from "@/app/store/Tracking";
 import { useDrawerStore } from "@/app/store/Drawer";
 import CountriesData from "@/app/utility/Countries";
 import styles from "@/app/styles/shipping.module.css";
@@ -16,6 +18,8 @@ import {
 
 export default function Shipping() {
   const router = useRouter();
+  const { isAuth, email, accessToken } = useAuthStore();
+  const createTracking = useTrackingStore((state) => state.createTracking);
   const { togglePopup } = useDrawerStore();
   const countryNames = CountriesData.map((country) => country.name);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +27,7 @@ export default function Shipping() {
     weight: "",
     productType: "",
     country: "",
-    shipmentMode: "", 
+    shipmentMode: "",
   });
 
   const [totalCost, setTotalCost] = useState(null);
@@ -34,9 +38,8 @@ export default function Shipping() {
     country,
     shipmentMode,
   }) => {
-    // pricing logic:
     const pricingRules = {
-      baseCostPerKg: 10, // cost per kg in USD
+      baseCostPerKg: 10,
       productTypeMultipliers: {
         fragile: 2.0,
         standard: 1.0,
@@ -60,47 +63,43 @@ export default function Shipping() {
     };
 
     const getRegion = (countryCode) => {
-      const northAmerica = ["US", "CA", "MX"];
-      const southAmerica = ["AR", "BR", "CL", "CO", "PE", "VE"];
-      const europe = [
-        "GB",
-        "FR",
-        "DE",
-        "IT",
-        "ES",
-        "NL",
-        "BE",
-        "CH",
-        "SE",
-        "NO",
-        "DK",
-      ];
-      const asia = ["CN", "JP", "IN", "KR", "SG", "TH", "MY", "ID"];
-      const africa = ["ZA", "EG", "NG", "MA", "DZ", "KE"];
-      const oceania = ["AU", "NZ"];
-      const middleEast = ["AE", "SA", "IR", "IL", "QA", "KW"];
+      const regions = {
+        northAmerica: ["US", "CA", "MX"],
+        southAmerica: ["AR", "BR", "CL", "CO", "PE", "VE"],
+        europe: [
+          "GB",
+          "FR",
+          "DE",
+          "IT",
+          "ES",
+          "NL",
+          "BE",
+          "CH",
+          "SE",
+          "NO",
+          "DK",
+        ],
+        asia: ["CN", "JP", "IN", "KR", "SG", "TH", "MY", "ID"],
+        africa: ["ZA", "EG", "NG", "MA", "DZ", "KE"],
+        oceania: ["AU", "NZ"],
+        middleEast: ["AE", "SA", "IR", "IL", "QA", "KW"],
+      };
 
-      if (northAmerica.includes(countryCode)) return "North America";
-      if (southAmerica.includes(countryCode)) return "South America";
-      if (europe.includes(countryCode)) return "Europe";
-      if (asia.includes(countryCode)) return "Asia";
-      if (africa.includes(countryCode)) return "Africa";
-      if (oceania.includes(countryCode)) return "Oceania";
-      if (middleEast.includes(countryCode)) return "Middle East";
+      for (const [region, countries] of Object.entries(regions)) {
+        if (countries.includes(countryCode))
+          return region.replace(/[A-Z]/g, " $&").trim();
+      }
 
       return "Default";
     };
 
-
     const productTypeMultiplier =
       pricingRules.productTypeMultipliers[productType.toLowerCase()] || 1.0;
-
     const countryCode =
       CountriesData.find((c) => c.name === country)?.code || "US";
     const regionMultiplier =
       pricingRules.regionMultipliers[getRegion(countryCode)] ||
-      pricingRules.regionMultipliers["Default"];
-
+      pricingRules.regionMultipliers.Default;
     const shipmentModeMultiplier =
       pricingRules.shipmentModeMultipliers[shipmentMode.toLowerCase()] || 1.0;
 
@@ -118,8 +117,13 @@ export default function Shipping() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!isAuth) {
+      toast.error("Please log in to calculate shipping cost.");
+      return;
+    }
 
     const { weight, productType, country, shipmentMode } = formData;
 
@@ -134,33 +138,50 @@ export default function Shipping() {
     }
 
     setIsLoading(true);
-    setTimeout(() => {
+    try {
       const cost = calculateShippingCost(formData);
       const formattedCost = cost.toFixed(2);
       setTotalCost(formattedCost);
+
+      const trackingData = {
+        email,
+        country,
+        weight,
+        shipmentType: shipmentMode,
+        totalPrice: formattedCost,
+      };
+
+      const result = await createTracking(trackingData, accessToken);
+
+      if (result.success) {
+        setIsLoading(false);
+        togglePopup();
+        toast.success(
+          "Shipping cost calculated and tracking created successfully!"
+        );
+
+        const currentUrl = new URL(window.location.href);
+        const searchParams = currentUrl.searchParams;
+
+        searchParams.set("weight", weight);
+        searchParams.set("country", country);
+        searchParams.set("shipmentMode", shipmentMode);
+        searchParams.set("price", formattedCost);
+        searchParams.set("trackingId", result.trackingDetails.trackingId);
+
+        router.replace(`${currentUrl.pathname}?${searchParams.toString()}`);
+      } else {
+        toast.error(result.message);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      toast.error("An error occurred while processing your request.");
       setIsLoading(false);
-      togglePopup();
-      toast.success("Shipping cost calculated successfully!");
-
-      const currentUrl = new URL(window.location.href);
-      const searchParams = currentUrl.searchParams;
-
-      searchParams.set("weight", weight);
-      searchParams.set("country", country);
-      searchParams.set("shipmentMode", shipmentMode);
-      searchParams.set("price", formattedCost);
-
-      router.replace(`${currentUrl.pathname}?${searchParams.toString()}`);
-    }, 1000);
+    }
   };
 
   useEffect(() => {
-    if (
-      formData.weight === "" &&
-      formData.productType === "" &&
-      formData.country === "" &&
-      formData.shipmentMode === ""
-    ) {
+    if (Object.values(formData).every((value) => value === "")) {
       const currentUrl = new URL(window.location.href);
       currentUrl.search = "";
       router.replace(currentUrl.toString());
@@ -168,54 +189,48 @@ export default function Shipping() {
   }, [formData, router]);
 
   return (
-    <>
-      <form onSubmit={handleSubmit} className={styles.formContainer}>
-        <div className={styles.formInput}>
-          <WeightIcon className={styles.formIcon} />
-          <input
-            type="text"
-            name="weight"
-            value={formData.weight}
-            onChange={handleInputChange}
-            placeholder="Weight (kg)"
-          />
-        </div>
-
-        <Dropdown
-          options={["Fragile", "Standard", "Oversized"]}
-          onSelect={(option) =>
-            setFormData((prev) => ({ ...prev, productType: option }))
-          }
-          dropPlaceHolder="Select Product Type"
-          Icon={<ProductTypeIcon className={styles.formIcon} />}
+    <form onSubmit={handleSubmit} className={styles.formContainer}>
+      <div className={styles.formInput}>
+        <WeightIcon className={styles.formIcon} />
+        <input
+          type="text"
+          name="weight"
+          value={formData.weight}
+          onChange={handleInputChange}
+          placeholder="Weight (kg)"
         />
-        <Dropdown
-          options={["Road", "Air", "Sea"]}
-          onSelect={(option) =>
-            setFormData((prev) => ({ ...prev, shipmentMode: option }))
-          }
-          dropPlaceHolder="Select Shipment Mode"
-          Icon={<ShipmentIcon className={styles.formIcon} />}
-        />
-        <Dropdown
-          options={countryNames}
-          onSelect={(option) =>
-            setFormData((prev) => ({ ...prev, country: option }))
-          }
-          dropPlaceHolder="Select Country"
-          Icon={<CountryIcon className={styles.formIcon} />}
-        />
+      </div>
 
-        <button
-          type="submit"
-          disabled={isLoading}
-          className={styles.formButton}
-        >
-          {isLoading ? <Loader /> : "Calculate Shipping Cost"}
-        </button>
+      <Dropdown
+        options={["Fragile", "Standard", "Oversized"]}
+        onSelect={(option) =>
+          setFormData((prev) => ({ ...prev, productType: option }))
+        }
+        dropPlaceHolder="Select Product Type"
+        Icon={<ProductTypeIcon className={styles.formIcon} />}
+      />
+      <Dropdown
+        options={["Road", "Air", "Sea"]}
+        onSelect={(option) =>
+          setFormData((prev) => ({ ...prev, shipmentMode: option }))
+        }
+        dropPlaceHolder="Select Shipment Mode"
+        Icon={<ShipmentIcon className={styles.formIcon} />}
+      />
+      <Dropdown
+        options={countryNames}
+        onSelect={(option) =>
+          setFormData((prev) => ({ ...prev, country: option }))
+        }
+        dropPlaceHolder="Select Country"
+        Icon={<CountryIcon className={styles.formIcon} />}
+      />
 
-        <p>Our terms and conditions apply</p>
-      </form>
-    </>
+      <button type="submit" disabled={isLoading} className={styles.formButton}>
+        {isLoading ? <Loader /> : "Calculate Shipping Cost"}
+      </button>
+
+      <p>Our terms and conditions apply</p>
+    </form>
   );
 }

@@ -1,101 +1,174 @@
 "use client";
 
 import toast from "react-hot-toast";
-import styles from "@/app/styles/accounttable.module.css";
-import { useMemo, useState, useCallback } from "react";
-import { HiOutlineDownload as DownloadIcon } from "react-icons/hi";
-import { MdDeleteOutline as DeleteIcon } from "react-icons/md";
+import Loading from "@/app/components/Loading";
+import { useAuthStore } from "@/app/store/Auth";
+import { useEffect, useMemo, useState } from "react";
 import { IoCopy as CopyIcon } from "react-icons/io5";
+import styles from "@/app/styles/accounttable.module.css";
+import { useRouter, useSearchParams } from "next/navigation";
+import { 
+  HiOutlineDownload as DownloadIcon, 
+  HiRefresh as RefreshIcon 
+} from "react-icons/hi";
+import { MdDeleteOutline as DeleteIcon } from "react-icons/md";
 
 export default function AccountTable() {
-  const [accountsData, setAccountsData] = useState([
-    {
-      id: 1,
-      username: "collins",
-      email: "collins@gmail.com",
-      country: "Kenya",
-      activationDate: "20-11-2024-12hr",
-      isAuthorized: true,
-      isAdmin: true,
-      plan: "Weekly",
-    },
-    {
-      id: 2,
-      username: "alex",
-      email: "alex@gmail.com",
-      country: "Kenya",
-      activationDate: "20-11-2024-12hr",
-      isAuthorized: true,
-      isAdmin: true,
-      plan: "Weekly",
-    },
-    {
-      id: 3,
-      username: "maria",
-      email: "maria@gmail.com",
-      country: "Kenya",
-      activationDate: "20-11-2024-12hr",
-      isAuthorized: true,
-      isAdmin: true,
-      plan: "Weekly",
-    },
-  ]);
+  const authStore = useAuthStore();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const fetchGmailAccounts = useCallback(() => {
-    const gmailEmails = accountsData
-      .filter((account) => account.email.endsWith("@gmail.com"))
-      .map((account) => account.email)
-      .join(", ");
 
-    navigator.clipboard
-      .writeText(gmailEmails)
-      .then(() => toast.success("Emails copied to clipboard successfully!"))
-      .catch(() => toast.error("Failed to copy emails to clipboard."));
-  }, [accountsData]);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      setIsLoading(true);
+      try {
+        const result = await authStore.fetchUsers();
+        if (result.success) {
+          setUsers(result.users);
+        } else {
+          toast.error(result.message || "Failed to fetch users");
+        }
+      } catch (error) {
+        toast.error("An error occurred while fetching users");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const handleDelete = useCallback((id) => {
-    setAccountsData((prevData) => prevData.filter((account) => account.id !== id));
-    toast.success("Account deleted successfully!");
-  }, []);
+    fetchUserData();
+  }, [authStore, router]);
 
-  const handleToggle = useCallback((id) => {
-    setAccountsData((prevData) =>
-      prevData.map((account) =>
-        account.id === id
-          ? { ...account, isAuthorized: !account.isAuthorized }
-          : account
-      )
-    );
-  }, []);
+  const filteredUsers = useMemo(() => {
+    const cardType = searchParams.get('card');
+    
+    return users.filter(user => {
+      switch(cardType) {
+        case 'admin':
+          return user.isAdmin;
+        case 'paid':
+          return user.isAuthorized;
+        default:
+          return true;
+      }
+    });
+  }, [users, searchParams]);
 
-  const downloadEmail = useCallback(() => {
-    const emailList = accountsData.map((account) => account.email).join("\n");
+  const handleToggleAuthorization = async (email, currentStatus) => {
+
+    try {
+      const result = await authStore.toggleAuthorization({ 
+        email, 
+        isAuthorized: !currentStatus 
+      });
+
+      if (result.success) {
+        setUsers(prevUsers => 
+          prevUsers.map(user => 
+            user.email === email 
+              ? { ...user, isAuthorized: !currentStatus } 
+              : user
+          )
+        );
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      toast.error("Failed to toggle authorization");
+    }
+  };
+
+  const downloadEmails = () => {
+    const emailList = filteredUsers.map(user => user.email).join("\n");
     const blob = new Blob([emailList], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement("a");
     link.href = url;
-    link.download = "emails.txt";
+    link.download = "user_emails.txt";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
     toast.success("Emails downloaded successfully!");
-  }, [accountsData]);
+  };
+
+  const copyGmailEmails = () => {
+    const gmailEmails = filteredUsers
+      .filter(user => user.email.endsWith("@gmail.com"))
+      .map(user => user.email)
+      .join(", ");
+
+    navigator.clipboard
+      .writeText(gmailEmails)
+      .then(() => toast.success("Gmail emails copied to clipboard!"))
+      .catch(() => toast.error("Failed to copy emails"));
+  };
+
+  const handleDelete = async (userId) => {
+    if (!userId) return;
+      
+    if (!window.confirm("Are you sure you want to delete this user?")) {
+      return;
+    }
+  
+    try {
+      const result = await authStore.deleteUser(userId);
+      
+      if (result.success) {
+        setUsers(prevUsers => prevUsers.filter(user => user.userId !== userId));
+        toast.success(result.message || "User deleted successfully");
+      } else {
+        toast.error(result.message || "Failed to delete user");
+      }
+    } catch (error) {
+      toast.error("An error occurred while deleting the user");
+    }
+  };
+
+  const handleRefresh = async () => {
+    
+    setIsLoading(true);
+    try {
+      const result = await authStore.fetchUsers();
+      if (result.success) {
+        setUsers(result.users);
+        toast.success("Users refreshed");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className={styles.accountContainer}>
       <div className={styles.tableHeader}>
-        <div className={styles.copyContainer} onClick={downloadEmail}>
-          <DownloadIcon aria-label="download account" className={styles.copyIcon} />
-          Download email
-        </div>
-        <div className={styles.copyContainer} onClick={fetchGmailAccounts}>
-          <CopyIcon aria-label="copy account" className={styles.copyIcon} />
-          Copy Emails
-        </div>
+          <div 
+            className={styles.copyContainer} 
+            onClick={downloadEmails}
+          >
+            <DownloadIcon aria-label="download emails" className={styles.copyIcon} />
+            Download Emails
+          </div>
+          <div 
+            className={styles.copyContainer} 
+            onClick={copyGmailEmails}
+          >
+            <CopyIcon aria-label="copy gmail emails" className={styles.copyIcon} />
+          </div>
+          <div 
+            className={styles.copyContainer} 
+            onClick={handleRefresh}
+          >
+            <RefreshIcon aria-label="refresh users" className={styles.copyIcon} />
+          </div>
       </div>
+
+      {isLoading && <Loading />}
 
       <div className={styles.tableWrapper}>
         <table className={styles.accountTable}>
@@ -103,35 +176,33 @@ export default function AccountTable() {
             <tr>
               <th>Username</th>
               <th>Email</th>
-              <th>Country</th>
-              <th>Paid Status</th>
+              <th>Status</th>
               <th>Toggle Paid</th>
               <th>Delete</th>
             </tr>
           </thead>
           <tbody>
-            {accountsData.map((account) => (
-              <tr key={account.id} className={styles.tableRow}>
-                <td>{account.username}</td>
-                <td>{account.email}</td>
-                <td>{account.country}</td>
-                <td>{account.isAuthorized ? "Paid" : "Not Paid"}</td>
+            {filteredUsers.map((user) => (
+              <tr key={user.email} className={styles.tableRow}>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td>{user.isAuthorized ? "Paid" : "Not paid"}</td>
                 <td>
                   <div
                     className={`${styles.toggleContainer} ${
-                      account.isAuthorized ? styles.toggleContainerActive : ""
+                      user.isAuthorized ? styles.toggleContainerActive : ""
                     }`}
-                    onClick={() => handleToggle(account.id)}
+                    onClick={() => handleToggleAuthorization(user.email, user.isAuthorized)}
                   >
                     <div className={styles.toggleInfoInner}>
-                      {account.isAuthorized ? "Deactivate" : "Activate"}
+                      {user.isAuthorized ? "Deactivate" : "Activate"}
                     </div>
                     <div className={styles.toggleThumb}></div>
                   </div>
                 </td>
                 <td>
                   <DeleteIcon
-                    onClick={() => handleDelete(account.id)}
+                    onClick={() => handleDelete(user.userId)}  
                     aria-label="delete account"
                     className={styles.deleteIcon}
                   />
@@ -140,6 +211,12 @@ export default function AccountTable() {
             ))}
           </tbody>
         </table>
+
+        {!isLoading && filteredUsers.length === 0 && (
+          <div className={styles.noUsersMessage}>
+           <h1> No users found</h1>
+          </div>
+        )}
       </div>
     </div>
   );

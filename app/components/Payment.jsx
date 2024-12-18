@@ -1,5 +1,4 @@
 "use client";
-
 import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -13,7 +12,7 @@ import { MdOutlinePlace as CountryIcon } from "react-icons/md";
 import { RiBankFill as BankIcon } from "react-icons/ri";
 
 export default function Payment() {
-  const { email } = useAuthStore();
+  const { email } = useAuthStore(); 
   const searchParams = useSearchParams();
   const requestPayment = useAuthStore((state) => state.requestPayment);
 
@@ -28,37 +27,31 @@ export default function Payment() {
 
   const requestPaymentDetails = async () => {
     if (!email) {
-      toast.error("Email is required to request payment details.");
-      return;
-    }
-
-    if (!accessToken) {
       toast.error("You must be logged in to request payment details.");
       return;
     }
+
 
     setIsLoading(true);
     try {
       const paymentData = {
         email,
-        ...dataDetails, 
+        ...dataDetails,
       };
 
       const result = await requestPayment(paymentData);
-
       if (result.success) {
         toast.success("Payment details requested successfully.");
       } else {
         toast.error(result.message);
       }
     } catch (error) {
-      toast.error(
-        "An error occurred while requesting payment details."
-      );
+      toast.error("An error occurred while requesting payment details.");
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <div className={styles.paymentContainer}>
       <h1>Payment Details</h1>
@@ -95,14 +88,14 @@ export default function Payment() {
                 <div className={styles.accountContentHeaderDetails}>
                   <BankIcon />
                   <h3>Request payment details</h3>
-                </div>
+                </div>              
               </div>
               <button
                 className={styles.formButton}
                 onClick={requestPaymentDetails}
                 disabled={isLoading}
               >
-                {isLoading ? <Loader/> : "Request"}
+                {isLoading ? <Loader /> : "Request"}
               </button>
             </div>
           </div>
