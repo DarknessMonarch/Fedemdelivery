@@ -159,6 +159,10 @@ export default function Shipping() {
         toast.success(
           "Shipping cost calculated and tracking created successfully!"
         );
+        toast.success(
+          "Check your email for tracking ID but pay for  delivery start and track your package."
+        );
+
 
         const currentUrl = new URL(window.location.href);
         const searchParams = currentUrl.searchParams;

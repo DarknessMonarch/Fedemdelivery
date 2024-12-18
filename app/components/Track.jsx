@@ -33,12 +33,7 @@ export default function Track() {
     status: "In Transit",
   });
 
-  const bankDetails = {
-    totalPrice: searchParams.get("price") || "0.00",
-    country: searchParams.get("country") || "Not specified",
-    weight: searchParams.get("weight") || "Not available",
-    trackingID: searchParams.get("trackingId") || "",
-  };
+const trackingID = searchParams.get("trackingId") || "";
 
   const handleCopy = (field, value) => {
     navigator.clipboard.writeText(value).then(() => {
@@ -115,11 +110,11 @@ export default function Track() {
               <div className={styles.accountCardNav}>
                 <div className={styles.accountCardNavDetails}>
                   <CountryIcon className={styles.accountCardNavDetailsIcon} />
-                  <span>{bankDetails.country}</span>
+                  <span>{tracking.shipmentDetails.country}</span>
                 </div>
                 <div className={styles.accountCardNavDetailsSpan}>
                   <WeightIcon className={styles.accountCardNavDetailsIcon} />
-                  <span>{bankDetails.weight}</span>
+                  <span>{tracking.shipmentDetails.weight}</span>
                 </div>
               </div>
               <div className={styles.accountContent}>
@@ -129,13 +124,13 @@ export default function Track() {
                       <AccountIcon />
                       <h3>Tracking ID</h3>
                     </div>
-                    <p>{bankDetails.trackingID}</p>
+                    <p>{trackingID}</p>
                   </div>
     
                   <button
                     className={styles.copyButton}
                     onClick={() =>
-                      handleCopy("tracking Id", bankDetails.trackingID)
+                      handleCopy("tracking Id", trackingID)
                     }
                   >
                     {copied["tracking Id"] ? <CopySuccess /> : <CopyIcon />}
