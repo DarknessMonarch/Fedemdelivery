@@ -1,6 +1,6 @@
 # Fedemdelivery
 
-Anywhere, Anytime – We Deliver the World to You!
+A logistic company, - Anywhere, Anytime – We Deliver the World to You! -
 
 ```bash
 npm run dev
