@@ -33,7 +33,11 @@ export default function Track() {
     status: "In Transit",
   });
 
-const trackingID = searchParams.get("trackingId") || "";
+  const trackingID = searchParams.get("trackingId") || "";
+  const weight = searchParams.get("weight") || "";
+  const country = searchParams.get("country") || "";
+  const shipmentMode = searchParams.get("shipmentMode") || "";
+  const price = searchParams.get("price") || "";
 
   const handleCopy = (field, value) => {
     navigator.clipboard.writeText(value).then(() => {
@@ -65,7 +69,7 @@ const trackingID = searchParams.get("trackingId") || "";
   ];
 
   useEffect(() => {
-    if (tracking && tracking.trackingStages) {
+    if (tracking?.trackingStages) {
       const currentUpdate = tracking.trackingStages.find(
         (update) => update.stage === currentStage
       );
@@ -110,11 +114,11 @@ const trackingID = searchParams.get("trackingId") || "";
               <div className={styles.accountCardNav}>
                 <div className={styles.accountCardNavDetails}>
                   <CountryIcon className={styles.accountCardNavDetailsIcon} />
-                  <span>{tracking.shipmentDetails.country}</span>
+                  <span>{tracking?.shipmentDetails?.country || country}</span>
                 </div>
                 <div className={styles.accountCardNavDetailsSpan}>
                   <WeightIcon className={styles.accountCardNavDetailsIcon} />
-                  <span>{tracking.shipmentDetails.weight}</span>
+                  <span>{tracking?.shipmentDetails?.weight || weight}</span>
                 </div>
               </div>
               <div className={styles.accountContent}>
@@ -129,9 +133,7 @@ const trackingID = searchParams.get("trackingId") || "";
     
                   <button
                     className={styles.copyButton}
-                    onClick={() =>
-                      handleCopy("tracking Id", trackingID)
-                    }
+                    onClick={() => handleCopy("tracking Id", trackingID)}
                   >
                     {copied["tracking Id"] ? <CopySuccess /> : <CopyIcon />}
                   </button>
